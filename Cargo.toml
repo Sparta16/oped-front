@@ -5,3 +5,4 @@ edition = "2021"
 
 [dependencies]
 yew = { version = "0.20.0", features = ["csr"] }
+lazy_static = "1.4.0"
