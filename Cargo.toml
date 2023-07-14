@@ -5,4 +5,6 @@ edition = "2021"
 
 [dependencies]
 yew = { version = "0.20.0", features = ["csr"] }
-lazy_static = "1.4.0"
+gloo = { version = "0.8.1" }
+serde = { version = "1.0.171" }
+serde_json = { version = "1.0.102" }

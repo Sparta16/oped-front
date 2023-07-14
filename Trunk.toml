@@ -1,0 +1,7 @@
+[[hooks]]
+stage = "post_build"
+command = "cmd"
+command_arguments = ["/C npx tailwindcss -i ./src/tailwind.css -o ./dist/.stage/index.css"]
+
+[watch]
+watch = ["src", "index.html", "tailwind.config.js", "postcss.config.js"]
