@@ -1,7 +1,7 @@
 use yew::prelude::*;
 use yew_router::prelude::*;
 
-use crate::pages::{HomePage, LoginPage, NotFoundPage, RegistrationPage};
+use crate::pages::{HomePage, LoginPage, NotFoundPage, RegistrationPage, UsersPage};
 
 use crate::components::Header;
 
@@ -32,6 +32,8 @@ pub fn switch_app_route(route: AppRoute) -> Html {
 pub enum MainRoute {
     #[at("/")]
     Home,
+    #[at("/users")]
+    Users,
     #[at("/registration")]
     Registration,
     #[at("/login")]
@@ -44,6 +46,7 @@ pub enum MainRoute {
 pub fn switch_main_route(route: MainRoute) -> Html {
     match route {
         MainRoute::Home => html! {<HomePage />},
+        MainRoute::Users => html! {<UsersPage />},
         MainRoute::Registration => html! {<RegistrationPage />},
         MainRoute::Login => html! {<LoginPage />},
         MainRoute::NotFound => html! {<Redirect<AppRoute> to={AppRoute::NotFound} />},

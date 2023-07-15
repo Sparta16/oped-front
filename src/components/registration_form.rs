@@ -1,8 +1,10 @@
-use ::yew::prelude::*;
 use gloo::dialogs::alert;
+use serde::{Deserialize, Serialize};
+use yew::prelude::*;
 
 use crate::components::{Button, Input};
 
+#[derive(Serialize, Deserialize, Clone)]
 pub struct RegistrationFormValues {
     login: String,
     password: String,
@@ -14,6 +16,13 @@ impl RegistrationFormValues {
     }
 }
 
+#[derive(Default, Clone)]
+struct FormState {
+    pub login: String,
+    pub password: String,
+    pub repeated_password: String,
+}
+
 #[derive(Properties, PartialEq)]
 pub struct Props {
     #[prop_or(Callback::noop())]
@@ -22,52 +31,65 @@ pub struct Props {
 
 #[function_component(RegistrationForm)]
 pub fn registration_form(props: &Props) -> Html {
-    let login = use_state(|| "".to_string());
-    let password = use_state(|| "".to_string());
-    let repeated_password = use_state(|| "".to_string());
+    let form_state = use_state(|| FormState::default());
 
     let handle_login_input = {
-        let login = login.clone();
-        move |value: String| login.set(value)
+        let form_state = form_state.clone();
+        move |value: String| {
+            form_state.set(FormState {
+                login: value,
+                ..(*form_state).clone()
+            });
+        }
     };
 
     let handle_password_input = {
-        let password = password.clone();
-        move |value: String| password.set(value)
+        let form_state = form_state.clone();
+        move |value: String| {
+            form_state.set(FormState {
+                password: value,
+                ..(*form_state).clone()
+            });
+        }
     };
 
     let handle_repeated_password_input = {
-        let repeated_password = repeated_password.clone();
-        move |value: String| repeated_password.set(value)
+        let form_state = form_state.clone();
+        move |value: String| {
+            form_state.set(FormState {
+                repeated_password: value,
+                ..(*form_state).clone()
+            });
+        }
     };
 
     let handle_submit = {
         let on_submit = props.on_submit.clone();
-        let login = login.clone();
-        let password = password.clone();
-        let repeated_password = repeated_password.clone();
+        let form_state = form_state.clone();
         move |event: SubmitEvent| {
             event.prevent_default();
 
-            if (*login).len() < 3 || (*login).len() > 30 {
+            let form_state = (*form_state).clone();
+
+            if form_state.login.len() < 3 || form_state.login.len() > 30 {
                 return alert("Длина логина: 3-30");
             }
 
-            if (*password).len() < 3
-                || (*password).len() > 30
-                || (*repeated_password).len() < 3
-                || (*repeated_password).len() > 30
+            if form_state.password.len() < 3
+                || form_state.password.len() > 30
+                || form_state.repeated_password.len() < 3
+                || form_state.repeated_password.len() > 30
             {
                 return alert("Длина пароля: 3-30");
             }
 
-            if *password != *repeated_password {
+            if form_state.password != form_state.repeated_password {
                 return alert("Пароли не совпадают");
             }
 
             on_submit.emit(RegistrationFormValues::new(
-                (*login).clone(),
-                (*password).clone(),
+                form_state.login.clone(),
+                form_state.password.clone(),
             ))
         }
     };

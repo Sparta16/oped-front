@@ -9,3 +9,6 @@ pub use not_found_page::*;
 
 mod registration_page;
 pub use registration_page::*;
+
+mod users_page;
+pub use users_page::*;

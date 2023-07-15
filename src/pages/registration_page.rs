@@ -1,4 +1,6 @@
 use gloo::dialogs::alert;
+use reqwasm::http::Request;
+use yew::platform::spawn_local;
 use yew::prelude::*;
 
 use crate::components::{RegistrationForm, RegistrationFormValues};
@@ -7,7 +9,19 @@ use crate::components::{RegistrationForm, RegistrationFormValues};
 pub fn registration_page() -> Html {
     let handle_submit = {
         |payload: RegistrationFormValues| {
-            alert("Зарегались");
+            spawn_local(async move {
+                let result = Request::post("http://localhost:25565/api/v1/users/registration")
+                    .header("content-type", "application/json")
+                    .body(serde_json::to_string(&payload).unwrap())
+                    .send()
+                    .await
+                    .unwrap()
+                    .text()
+                    .await
+                    .unwrap();
+
+                alert(result.as_str());
+            });
         }
     };
 
