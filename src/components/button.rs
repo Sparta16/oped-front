@@ -5,7 +5,7 @@ pub struct Props {
     #[prop_or(String::from(""))]
     pub class: String,
     #[prop_or(Callback::noop())]
-    pub on_click: Callback<MouseEvent>,
+    pub on_click: Callback<()>,
     #[prop_or(String::from("Отправить"))]
     pub text: String,
 }
@@ -15,7 +15,7 @@ pub fn button(props: &Props) -> Html {
     let handle_click = {
         let on_click = props.on_click.clone();
 
-        move |event: MouseEvent| on_click.emit(event)
+        move |event: _| on_click.emit(())
     };
 
     html! {
