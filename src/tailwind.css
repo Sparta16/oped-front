@@ -1,3 +1,16 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.auto-cols-minmax {
+    grid-auto-columns: minmax(min-content, max-content);
+}
+
+.auto-rows-minmax {
+    grid-auto-rows: minmax(min-content, max-content);
+}
+
+html, body {
+    height: 100%;
+    width: 100vw;
+}

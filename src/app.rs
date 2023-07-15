@@ -1,10 +1,13 @@
 use yew::prelude::*;
+use yew_router::prelude::*;
+
+use crate::routes::{switch_app_route, AppRoute};
 
 #[function_component(App)]
 pub fn app() -> Html {
     html! {
-        <div class="bg-blue-100">
-            {"Hello world!"}
-        </div>
+        <BrowserRouter>
+            <Switch<AppRoute> render={switch_app_route} />
+        </BrowserRouter>
     }
 }
