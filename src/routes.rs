@@ -36,6 +36,9 @@ pub enum MainRoute {
     Registration,
     #[at("/login")]
     Login,
+    #[not_found]
+    #[at("/404")]
+    NotFound,
 }
 
 pub fn switch_main_route(route: MainRoute) -> Html {
@@ -43,5 +46,6 @@ pub fn switch_main_route(route: MainRoute) -> Html {
         MainRoute::Home => html! {<HomePage />},
         MainRoute::Registration => html! {<RegistrationPage />},
         MainRoute::Login => html! {<LoginPage />},
+        MainRoute::NotFound => html! {<Redirect<AppRoute> to={AppRoute::NotFound} />},
     }
 }
