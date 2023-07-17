@@ -1,11 +1,17 @@
-mod header;
-pub use header::*;
+pub mod header;
+pub use header::Header;
 
-mod button;
-pub use button::*;
+pub mod button;
+pub use button::Button;
 
-mod input;
-pub use input::*;
+pub mod input;
+pub use input::Input;
 
-mod registration_form;
-pub use registration_form::*;
+pub mod registration_form;
+pub use registration_form::RegistrationForm;
+
+pub mod users_list;
+pub use users_list::UsersList;
+
+pub mod login_form;
+pub use login_form::LoginForm;

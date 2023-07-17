@@ -15,13 +15,13 @@ pub fn button(props: &Props) -> Html {
     let handle_click = {
         let on_click = props.on_click.clone();
 
-        move |event: _| on_click.emit(())
+        move |_| on_click.emit(())
     };
 
     html! {
         <button
             onclick={handle_click}
-            class={"bg-pink-200 rounded-lg px-4 ".to_string() + props.class.clone().as_str()}
+            class={"bg-sky-100 rounded-lg px-4 ".to_string() + props.class.clone().as_str()}
         >
             {props.text.clone()}
         </button>

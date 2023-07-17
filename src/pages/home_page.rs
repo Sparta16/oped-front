@@ -3,6 +3,8 @@ use yew::prelude::*;
 #[function_component(HomePage)]
 pub fn home_page() -> Html {
     html! {
-        <main>{"Главная страница"}</main>
+        <main class="grid place-items-center gap-2 pt-4">
+            <h1>{"Главная страница"}</h1>
+        </main>
     }
 }

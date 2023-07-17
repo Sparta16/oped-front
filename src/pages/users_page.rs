@@ -1,10 +1,13 @@
 use reqwasm::http::Request;
 use serde::Deserialize;
+use web_sys::RequestCredentials;
 use yew::platform::spawn_local;
 use yew::prelude::*;
 
-#[derive(Deserialize, Debug)]
-struct UserResDto {
+use crate::components::UsersList;
+
+#[derive(Deserialize, Debug, PartialEq, Clone)]
+pub struct UserResDto {
     pub id: i32,
     pub login: String,
 }
@@ -18,6 +21,7 @@ pub fn users_page() -> Html {
         move |_| {
             spawn_local(async move {
                 let result = Request::get("http://localhost:25565/api/v1/users")
+                    .credentials(RequestCredentials::Include)
                     .send()
                     .await
                     .unwrap()
@@ -32,17 +36,9 @@ pub fn users_page() -> Html {
     );
 
     html! {
-        <main>
+        <main class="grid place-items-center gap-2 pt-4">
             <h1>{"Список пользователей"}</h1>
-            <ul>
-                {
-                    (*users).iter().map(|user| {
-                        html! {
-                            <li key={user.id}>{user.login.clone()}</li>
-                        }
-                    }).collect::<Html>()
-                }
-            </ul>
+            <UsersList users={(*users).clone()} />
         </main>
     }
 }

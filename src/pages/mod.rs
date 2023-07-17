@@ -1,14 +1,14 @@
-mod home_page;
-pub use home_page::*;
+pub mod home_page;
+pub use home_page::HomePage;
 
-mod login_page;
-pub use login_page::*;
+pub mod login_page;
+pub use login_page::LoginPage;
 
-mod not_found_page;
-pub use not_found_page::*;
+pub mod not_found_page;
+pub use not_found_page::NotFoundPage;
 
-mod registration_page;
-pub use registration_page::*;
+pub mod registration_page;
+pub use registration_page::RegistrationPage;
 
-mod users_page;
-pub use users_page::*;
+pub mod users_page;
+pub use users_page::UsersPage;
