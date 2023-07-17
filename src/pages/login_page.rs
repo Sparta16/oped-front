@@ -6,11 +6,15 @@ use yew::prelude::*;
 
 use crate::components::login_form::LoginFormValues;
 use crate::components::LoginForm;
+use crate::context::{AuthContext, AuthContextAction};
 
 #[function_component(LoginPage)]
 pub fn login_page() -> Html {
+    let auth_context = use_context::<AuthContext>().unwrap();
+
     let handle_submit = {
-        |payload: LoginFormValues| {
+        move |payload: LoginFormValues| {
+            let auth_context = auth_context.clone();
             spawn_local(async move {
                 let result = Request::post("http://localhost:25565/api/v1/users/login")
                     .header("content-type", "application/json")
@@ -24,6 +28,8 @@ pub fn login_page() -> Html {
                     .unwrap();
 
                 alert(result.as_str());
+
+                auth_context.dispatch(AuthContextAction::RequestFetch);
             });
         }
     };
