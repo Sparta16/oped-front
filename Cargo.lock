@@ -490,6 +490,20 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "dd8b5dd2ae5ed71462c540258bedcb51965123ad7e7ccf4b9a8cafaa4a63576d"
 
 [[package]]
+name = "oped-front"
+version = "0.1.0"
+dependencies = [
+ "gloo",
+ "reqwasm",
+ "serde",
+ "serde_json",
+ "wasm-bindgen",
+ "web-sys",
+ "yew",
+ "yew-router",
+]
+
+[[package]]
 name = "percent-encoding"
 version = "2.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -621,20 +635,6 @@ name = "route-recognizer"
 version = "0.3.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "afab94fb28594581f62d981211a9a4d53cc8130bbcbbb89a0440d9b8e81a7746"
-
-[[package]]
-name = "rust-yew-demo"
-version = "0.1.0"
-dependencies = [
- "gloo",
- "reqwasm",
- "serde",
- "serde_json",
- "wasm-bindgen",
- "web-sys",
- "yew",
- "yew-router",
-]
 
 [[package]]
 name = "rustc-demangle"
