@@ -31,7 +31,7 @@ pub struct Props {
 
 #[function_component(RegistrationForm)]
 pub fn registration_form(props: &Props) -> Html {
-    let form_state = use_state(|| FormState::default());
+    let form_state = use_state(FormState::default);
 
     let handle_login_input = {
         let form_state = form_state.clone();
