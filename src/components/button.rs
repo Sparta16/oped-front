@@ -21,7 +21,7 @@ pub fn button(props: &Props) -> Html {
     html! {
         <button
             onclick={handle_click}
-            class={"bg-sky-100 rounded-lg px-4 outline-gray-300 ".to_string() + props.class.clone().as_str()}
+            class={"bg-sky-100 rounded-lg px-4 outline-gray-300 ".to_owned() + props.class.clone().as_str()}
         >
             {props.text.clone()}
         </button>

@@ -33,7 +33,7 @@ pub fn input(props: &Props) -> Html {
             placeholder={props.placeholder.clone()}
             oninput={handle_input}
             type={props.input_type.clone()}
-            class={"bg-sky-100 rounded-lg px-2 outline-gray-300 ".to_string() + props.class.clone().as_str()}
+            class={"bg-sky-100 rounded-lg px-2 outline-gray-300 ".to_owned() + props.class.clone().as_str()}
         />
     }
 }

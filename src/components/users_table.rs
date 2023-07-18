@@ -1,6 +1,6 @@
 use yew::prelude::*;
 
-use crate::pages::users_page::UserResDto;
+use crate::api::fetch_users::UserResDto;
 
 #[derive(Properties, PartialEq)]
 pub struct Props {
