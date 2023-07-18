@@ -1,9 +1,16 @@
 use yew::prelude::*;
 use yew_router::prelude::*;
 
+use crate::components::Header;
+use crate::hocs::WithAuth;
 use crate::pages::{HomePage, LoginPage, NotFoundPage, RegistrationPage, UsersPage};
 
-use crate::components::Header;
+#[function_component(Router)]
+pub fn router() -> Html {
+    html! {
+        <Switch<AppRoute> render={switch_app_route} />
+    }
+}
 
 #[derive(Clone, Routable, PartialEq)]
 pub enum AppRoute {
@@ -46,7 +53,11 @@ pub enum MainRoute {
 pub fn switch_main_route(route: MainRoute) -> Html {
     match route {
         MainRoute::Home => html! {<HomePage />},
-        MainRoute::Users => html! {<UsersPage />},
+        MainRoute::Users => html! {
+            <WithAuth denied_children={html! {<Redirect<AppRoute> to={AppRoute::NotFound} />}}>
+                <UsersPage />
+            </WithAuth>
+        },
         MainRoute::Registration => html! {<RegistrationPage />},
         MainRoute::Login => html! {<LoginPage />},
         MainRoute::NotFound => html! {<Redirect<AppRoute> to={AppRoute::NotFound} />},

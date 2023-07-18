@@ -2,9 +2,9 @@ use yew::prelude::*;
 
 #[derive(Properties, PartialEq)]
 pub struct Props {
-    #[prop_or(String::from(""))]
+    #[prop_or_default]
     pub class: String,
-    #[prop_or(Callback::noop())]
+    #[prop_or_default]
     pub on_click: Callback<()>,
     #[prop_or(String::from("Отправить"))]
     pub text: String,
@@ -21,7 +21,7 @@ pub fn button(props: &Props) -> Html {
     html! {
         <button
             onclick={handle_click}
-            class={"bg-sky-100 rounded-lg px-4 ".to_string() + props.class.clone().as_str()}
+            class={"bg-sky-100 rounded-lg px-4 outline-gray-300 ".to_string() + props.class.clone().as_str()}
         >
             {props.text.clone()}
         </button>

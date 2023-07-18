@@ -14,3 +14,9 @@ html, body {
     height: 100%;
     width: 100vw;
 }
+
+body {
+    display: grid;
+    place-items: stretch;
+    grid-template-rows: minmax(min-content, max-content) 1fr;
+}

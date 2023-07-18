@@ -3,9 +3,11 @@ use reqwasm::http::Request;
 use web_sys::RequestCredentials;
 use yew::platform::spawn_local;
 use yew::prelude::*;
+use yew_router::prelude::*;
 
 use crate::components::registration_form::RegistrationFormValues;
 use crate::components::RegistrationForm;
+use crate::routes::MainRoute;
 
 #[function_component(RegistrationPage)]
 pub fn registration_page() -> Html {
@@ -29,9 +31,10 @@ pub fn registration_page() -> Html {
     };
 
     html! {
-        <main class="grid place-items-center gap-2 pt-4">
+        <main class="grid place-items-center gap-2 pt-4 auto-rows-minmax">
             <h1>{"Регистрация"}</h1>
             <RegistrationForm on_submit={handle_submit} />
+            <Link<MainRoute> classes="text-xs opacity-75 hover:opacity-100" to={MainRoute::Login}>{"Уже есть аккаунт? Авторизироваться"}</Link<MainRoute>>
         </main>
     }
 }

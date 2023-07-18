@@ -25,7 +25,7 @@ struct FormState {
 
 #[derive(Properties, PartialEq)]
 pub struct Props {
-    #[prop_or(Callback::noop())]
+    #[prop_or_default]
     pub on_submit: Callback<RegistrationFormValues>,
 }
 

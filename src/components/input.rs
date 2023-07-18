@@ -4,11 +4,11 @@ use yew::prelude::*;
 
 #[derive(Properties, PartialEq)]
 pub struct Props {
-    #[prop_or(String::from(""))]
+    #[prop_or_default]
     pub class: String,
-    #[prop_or(Callback::noop())]
+    #[prop_or_default]
     pub on_input: Callback<String>,
-    #[prop_or(String::from(""))]
+    #[prop_or_default]
     pub placeholder: String,
     #[prop_or(String::from("text"))]
     pub input_type: String,

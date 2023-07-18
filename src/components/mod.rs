@@ -10,8 +10,8 @@ pub use input::Input;
 pub mod registration_form;
 pub use registration_form::RegistrationForm;
 
-pub mod users_list;
-pub use users_list::UsersList;
+pub mod users_table;
+pub use users_table::UsersTable;
 
 pub mod login_form;
 pub use login_form::LoginForm;

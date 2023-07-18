@@ -3,14 +3,16 @@ use reqwasm::http::Request;
 use web_sys::RequestCredentials;
 use yew::platform::spawn_local;
 use yew::prelude::*;
+use yew_router::prelude::*;
 
 use crate::components::login_form::LoginFormValues;
 use crate::components::LoginForm;
-use crate::context::{AuthContext, AuthContextAction};
+use crate::contexts::{use_auth_context, AuthContextAction};
+use crate::routes::MainRoute;
 
 #[function_component(LoginPage)]
 pub fn login_page() -> Html {
-    let auth_context = use_context::<AuthContext>().unwrap();
+    let auth_context = use_auth_context();
 
     let handle_submit = {
         move |payload: LoginFormValues| {
@@ -35,9 +37,10 @@ pub fn login_page() -> Html {
     };
 
     html! {
-        <main class="grid place-items-center gap-2 pt-4">
+        <main class="grid place-items-center gap-2 pt-4 auto-rows-minmax">
             <h1>{"Авторизация"}</h1>
             <LoginForm on_submit={handle_submit} />
+            <Link<MainRoute> classes="text-xs opacity-75 hover:opacity-100" to={MainRoute::Registration}>{"Нет аккаунта? Зарегистрироваться"}</Link<MainRoute>>
         </main>
     }
 }

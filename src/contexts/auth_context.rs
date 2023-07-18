@@ -96,3 +96,8 @@ pub fn auth_provider(props: &Props) -> Html {
         </ContextProvider<UseReducerHandle<AuthContextState>>>
     }
 }
+
+#[hook]
+pub fn use_auth_context() -> AuthContext {
+    use_context::<AuthContext>().expect("AuthContext must be provided by AuthProvider")
+}

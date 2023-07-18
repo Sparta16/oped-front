@@ -2,8 +2,8 @@
 port = 25566
 
 [watch]
-watch = ["src", "index.html", "tailwind.config.js", "postcss.config.js"]
-ignore = ["target", "dist", ".idea", "oped-front.iml", ".gitignore", "Cargo.toml", "Cargo.lock"]
+watch = ["src", "index.html", "tailwind.config.js", "postcss.config.js", "Cargo.toml"]
+ignore = ["target", "dist", ".idea", "oped-front.iml", ".gitignore", "Cargo.lock"]
 
 [[hooks]]
 stage = "post_build"

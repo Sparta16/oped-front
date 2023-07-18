@@ -4,7 +4,7 @@ use web_sys::RequestCredentials;
 use yew::platform::spawn_local;
 use yew::prelude::*;
 
-use crate::components::UsersList;
+use crate::components::UsersTable;
 
 #[derive(Deserialize, Debug, PartialEq, Clone)]
 pub struct UserResDto {
@@ -36,9 +36,9 @@ pub fn users_page() -> Html {
     );
 
     html! {
-        <main class="grid place-items-center gap-2 pt-4">
+        <main class="grid place-items-center gap-2 pt-4 auto-rows-minmax">
             <h1>{"Список пользователей"}</h1>
-            <UsersList users={(*users).clone()} />
+            <UsersTable users={(*users).clone()} />
         </main>
     }
 }

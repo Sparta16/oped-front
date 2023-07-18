@@ -1,6 +1,8 @@
 mod app;
 mod components;
-mod context;
+mod contexts;
+mod hocs;
+mod hooks;
 mod pages;
 mod routes;
 
