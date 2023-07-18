@@ -14,8 +14,13 @@ pub fn users_page() -> Html {
             spawn_local(async move {
                 let result = fetch_users().await;
 
-                if let Ok(users) = result {
-                    cloned_users.set(users);
+                match result {
+                    Ok(users) => {
+                        cloned_users.set(users);
+                    }
+                    Err(_) => {
+                        cloned_users.set(vec![]);
+                    }
                 }
             });
         },

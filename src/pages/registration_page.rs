@@ -1,31 +1,36 @@
 use gloo::dialogs::alert;
-use reqwasm::http::Request;
-use web_sys::RequestCredentials;
 use yew::platform::spawn_local;
 use yew::prelude::*;
 use yew_router::prelude::*;
 
+use crate::api::{fetch_user_registration, models::ApiError};
 use crate::components::registration_form::RegistrationFormValues;
 use crate::components::RegistrationForm;
 use crate::routes::MainRoute;
 
 #[function_component(RegistrationPage)]
 pub fn registration_page() -> Html {
-    let handle_submit = {
-        |payload: RegistrationFormValues| {
-            spawn_local(async move {
-                let result = Request::post("http://localhost:25565/api/v1/users/registration")
-                    .header("content-type", "application/json")
-                    .body(serde_json::to_string(&payload).unwrap())
-                    .credentials(RequestCredentials::Include)
-                    .send()
-                    .await
-                    .unwrap()
-                    .text()
-                    .await
-                    .unwrap();
+    let navigator = use_navigator().unwrap();
 
-                alert(result.as_str());
+    let handle_submit = {
+        move |payload: RegistrationFormValues| {
+            let navigator = navigator.clone();
+
+            spawn_local(async move {
+                let result = fetch_user_registration(payload.into()).await;
+
+                match result {
+                    Ok(_) => {
+                        alert("OK");
+                        navigator.push(&MainRoute::Login);
+                    }
+                    Err(ApiError::Payload(payload)) => {
+                        alert(payload.message.as_str());
+                    }
+                    Err(ApiError::Fetch(message)) => {
+                        alert(message.as_str());
+                    }
+                }
             });
         }
     };

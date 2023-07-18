@@ -2,6 +2,7 @@ use gloo::dialogs::alert;
 use serde::{Deserialize, Serialize};
 use yew::prelude::*;
 
+use crate::api::fetch_user_login::UserLoginReqDto;
 use crate::components::{Button, Input};
 
 #[derive(Serialize, Deserialize, Clone)]
@@ -13,6 +14,15 @@ pub struct LoginFormValues {
 impl LoginFormValues {
     pub fn new(login: String, password: String) -> Self {
         Self { login, password }
+    }
+}
+
+impl Into<UserLoginReqDto> for LoginFormValues {
+    fn into(self) -> UserLoginReqDto {
+        UserLoginReqDto {
+            login: self.login,
+            password: self.password,
+        }
     }
 }
 

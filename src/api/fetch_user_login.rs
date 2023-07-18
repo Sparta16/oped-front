@@ -1,20 +1,24 @@
 use reqwasm::http::Request;
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 use web_sys::RequestCredentials;
 
 use crate::api::models::{ApiError, ApiErrorPayload};
 use crate::constants::ENV_CONFIG;
 
-#[derive(Deserialize, Debug, PartialEq, Clone)]
-pub struct UserResDto {
-    pub id: i32,
+#[derive(Serialize, Deserialize, Clone)]
+pub struct UserLoginReqDto {
     pub login: String,
+    pub password: String,
 }
 
-pub async fn fetch_users() -> Result<Vec<UserResDto>, ApiError> {
-    let result = Request::get((ENV_CONFIG.clone_api_base_url() + "/users").as_str())
+#[derive(Deserialize, Debug, PartialEq, Clone)]
+pub struct UserLoginResDto {}
+
+pub async fn fetch_user_login(payload: UserLoginReqDto) -> Result<UserLoginResDto, ApiError> {
+    let result = Request::post((ENV_CONFIG.clone_api_base_url() + "/users/login").as_str())
         .header("content-type", "application/json")
         .credentials(RequestCredentials::Include)
+        .body(serde_json::to_string(&payload).unwrap())
         .send()
         .await;
 
@@ -31,13 +35,13 @@ pub async fn fetch_users() -> Result<Vec<UserResDto>, ApiError> {
         }));
     }
 
-    let result = response.json::<Vec<UserResDto>>().await;
+    let result = response.json::<UserLoginResDto>().await;
 
     if let Err(error) = result {
         return Err(error.into());
     }
 
-    let users = result.unwrap();
+    let dto = result.unwrap();
 
-    Ok(users)
+    Ok(dto)
 }

@@ -2,6 +2,7 @@ use gloo::dialogs::alert;
 use serde::{Deserialize, Serialize};
 use yew::prelude::*;
 
+use crate::api::fetch_user_registration::UserRegistrationReqDto;
 use crate::components::{Button, Input};
 
 #[derive(Serialize, Deserialize, Clone)]
@@ -13,6 +14,15 @@ pub struct RegistrationFormValues {
 impl RegistrationFormValues {
     pub fn new(login: String, password: String) -> Self {
         Self { login, password }
+    }
+}
+
+impl Into<UserRegistrationReqDto> for RegistrationFormValues {
+    fn into(self) -> UserRegistrationReqDto {
+        UserRegistrationReqDto {
+            login: self.login,
+            password: self.password,
+        }
     }
 }
 

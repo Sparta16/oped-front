@@ -4,15 +4,25 @@ use web_sys::RequestCredentials;
 
 use crate::api::models::{ApiError, ApiErrorPayload};
 use crate::constants::ENV_CONFIG;
+use crate::contexts::auth_context::Profile;
 
-#[derive(Deserialize, Debug, PartialEq, Clone)]
-pub struct UserResDto {
+#[derive(Debug, Clone, PartialEq, Deserialize)]
+pub struct ProfileResDto {
     pub id: i32,
     pub login: String,
 }
 
-pub async fn fetch_users() -> Result<Vec<UserResDto>, ApiError> {
-    let result = Request::get((ENV_CONFIG.clone_api_base_url() + "/users").as_str())
+impl Into<Profile> for ProfileResDto {
+    fn into(self) -> Profile {
+        Profile {
+            id: self.id,
+            login: self.login,
+        }
+    }
+}
+
+pub async fn fetch_profile() -> Result<ProfileResDto, ApiError> {
+    let result = Request::get((ENV_CONFIG.clone_api_base_url() + "/users/profile").as_str())
         .header("content-type", "application/json")
         .credentials(RequestCredentials::Include)
         .send()
@@ -31,13 +41,13 @@ pub async fn fetch_users() -> Result<Vec<UserResDto>, ApiError> {
         }));
     }
 
-    let result = response.json::<Vec<UserResDto>>().await;
+    let result = response.json::<ProfileResDto>().await;
 
     if let Err(error) = result {
         return Err(error.into());
     }
 
-    let users = result.unwrap();
+    let profile = result.unwrap();
 
-    Ok(users)
+    Ok(profile)
 }

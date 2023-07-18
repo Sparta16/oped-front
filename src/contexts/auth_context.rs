@@ -1,9 +1,9 @@
-use reqwasm::http::Request;
 use serde::Deserialize;
 use std::rc::Rc;
-use web_sys::RequestCredentials;
 use yew::platform::spawn_local;
 use yew::prelude::*;
+
+use crate::api::fetch_profile;
 
 #[derive(Debug, Clone, PartialEq, Deserialize)]
 pub struct Profile {
@@ -66,19 +66,12 @@ pub fn auth_provider(props: &Props) -> Html {
         |_| {
             if (*cloned_auth_context).should_fetch {
                 spawn_local(async move {
-                    let result = Request::get("http://localhost:25565/api/v1/users/profile")
-                        .header("content-type", "application/json")
-                        .credentials(RequestCredentials::Include)
-                        .send()
-                        .await
-                        .unwrap()
-                        .json::<Profile>()
-                        .await;
+                    let result = fetch_profile().await;
 
                     match result {
                         Ok(profile) => {
                             cloned_auth_context
-                                .dispatch(AuthContextAction::SetProfile(Some(profile)));
+                                .dispatch(AuthContextAction::SetProfile(Some(profile.into())));
                         }
                         Err(_) => {
                             cloned_auth_context.dispatch(AuthContextAction::SetProfile(None));
