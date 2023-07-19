@@ -12,6 +12,12 @@ pub struct Props {
     pub placeholder: String,
     #[prop_or(String::from("text"))]
     pub input_type: String,
+    #[prop_or_default]
+    pub required: bool,
+    #[prop_or(u16::MIN)]
+    pub min_length: u16,
+    #[prop_or(u16::MAX)]
+    pub max_length: u16,
 }
 
 #[function_component(Input)]
@@ -33,6 +39,9 @@ pub fn input(props: &Props) -> Html {
             placeholder={props.placeholder.clone()}
             oninput={handle_input}
             type={props.input_type.clone()}
+            required={props.required}
+            minLength={props.min_length.to_string()}
+            maxLength={props.max_length.to_string()}
             class={"bg-sky-100 rounded-lg px-2 outline-gray-300 ".to_owned() + props.class.clone().as_str()}
         />
     }

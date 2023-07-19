@@ -1,4 +1,3 @@
-use gloo::dialogs::alert;
 use serde::{Deserialize, Serialize};
 use yew::prelude::*;
 
@@ -37,11 +36,26 @@ struct FormState {
 pub struct Props {
     #[prop_or_default]
     pub on_submit: Callback<RegistrationFormValues>,
+    pub error: Option<String>,
+    pub is_loading: bool,
 }
 
 #[function_component(RegistrationForm)]
 pub fn registration_form(props: &Props) -> Html {
     let form_state = use_state(FormState::default);
+    let error_state = use_state(|| None);
+
+    let error = props.error.clone();
+    let cloned_error = error.clone();
+    let cloned_error_state = error_state.clone();
+    use_effect_with_deps(
+        move |_| {
+            if cloned_error.is_some() {
+                cloned_error_state.set(cloned_error);
+            }
+        },
+        error,
+    );
 
     let handle_login_input = {
         let form_state = form_state.clone();
@@ -76,25 +90,18 @@ pub fn registration_form(props: &Props) -> Html {
     let handle_submit = {
         let on_submit = props.on_submit.clone();
         let form_state = form_state.clone();
+        let error_state = error_state.clone();
         move |event: SubmitEvent| {
             event.prevent_default();
 
+            error_state.set(None);
+
             let form_state = (*form_state).clone();
 
-            if form_state.login.len() < 3 || form_state.login.len() > 30 {
-                return alert("Длина логина: 3-30");
-            }
-
-            if form_state.password.len() < 3
-                || form_state.password.len() > 30
-                || form_state.repeated_password.len() < 3
-                || form_state.repeated_password.len() > 30
-            {
-                return alert("Длина пароля: 3-30");
-            }
-
             if form_state.password != form_state.repeated_password {
-                return alert("Пароли не совпадают");
+                error_state.set(Some("Пароли не совпадают".to_owned()));
+
+                return;
             }
 
             on_submit.emit(RegistrationFormValues::new(
@@ -106,10 +113,13 @@ pub fn registration_form(props: &Props) -> Html {
 
     html! {
         <form onsubmit={handle_submit} class="p-4 grid gap-2 place-items-center w-60 border border-grey-900 rounded-lg">
-            <Input class="w-full" placeholder="Логин" on_input={handle_login_input} />
-            <Input class="w-full" placeholder="Пароль" input_type="password" on_input={handle_password_input} />
-            <Input class="w-full" placeholder="Повторите пароль" input_type="password" on_input={handle_repeated_password_input} />
-            <Button text="Зарегистрироваться" />
+            <Input class="w-full" placeholder="Логин" required={true} min_length={3} max_length={30} on_input={handle_login_input} />
+            <Input class="w-full" placeholder="Пароль" required={true} min_length={3} max_length={30} input_type="password" on_input={handle_password_input} />
+            <Input class="w-full" placeholder="Повторите пароль" required={true} min_length={3} max_length={30} input_type="password" on_input={handle_repeated_password_input} />
+            <Button is_loading={props.is_loading} text="Зарегистрироваться" />
+            if let Some(error_message) = (*error_state).clone() {
+                <p class="text-xs text-red-600">{error_message}</p>
+            }
         </form>
     }
 }

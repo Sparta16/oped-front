@@ -2,7 +2,7 @@ use yew::prelude::*;
 use yew_router::prelude::*;
 
 use crate::components::Header;
-use crate::hocs::WithAuth;
+use crate::hocs::{WithAuth, WithoutAuth};
 use crate::pages::{HomePage, LoginPage, NotFoundPage, RegistrationPage, UsersPage};
 
 #[function_component(Router)]
@@ -58,8 +58,16 @@ pub fn switch_main_route(route: MainRoute) -> Html {
                 <UsersPage />
             </WithAuth>
         },
-        MainRoute::Registration => html! {<RegistrationPage />},
-        MainRoute::Login => html! {<LoginPage />},
+        MainRoute::Registration => html! {
+            <WithoutAuth denied_children={html! {<Redirect<AppRoute> to={AppRoute::NotFound} />}}>
+                <RegistrationPage />
+            </WithoutAuth>
+        },
+        MainRoute::Login => html! {
+            <WithoutAuth denied_children={html! {<Redirect<AppRoute> to={AppRoute::NotFound} />}}>
+                <LoginPage />
+            </WithoutAuth>
+        },
         MainRoute::NotFound => html! {<Redirect<AppRoute> to={AppRoute::NotFound} />},
     }
 }

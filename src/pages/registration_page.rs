@@ -1,4 +1,3 @@
-use gloo::dialogs::alert;
 use yew::platform::spawn_local;
 use yew::prelude::*;
 use yew_router::prelude::*;
@@ -12,25 +11,38 @@ use crate::routes::MainRoute;
 pub fn registration_page() -> Html {
     let navigator = use_navigator().unwrap();
 
+    let is_loading_state = use_state(bool::default);
+    let error_state = use_state(|| None);
+
     let handle_submit = {
+        let is_loading_state = is_loading_state.clone();
+        let error_state = error_state.clone();
+
         move |payload: RegistrationFormValues| {
             let navigator = navigator.clone();
+
+            is_loading_state.set(true);
+            error_state.set(None);
+
+            let is_loading_state = is_loading_state.clone();
+            let error_state = error_state.clone();
 
             spawn_local(async move {
                 let result = fetch_user_registration(payload.into()).await;
 
                 match result {
                     Ok(_) => {
-                        alert("OK");
                         navigator.push(&MainRoute::Login);
                     }
                     Err(ApiError::Payload(payload)) => {
-                        alert(payload.message.as_str());
+                        error_state.set(Some(payload.message));
                     }
                     Err(ApiError::Fetch(message)) => {
-                        alert(message.as_str());
+                        error_state.set(Some(message));
                     }
-                }
+                };
+
+                is_loading_state.set(false);
             });
         }
     };
@@ -38,7 +50,7 @@ pub fn registration_page() -> Html {
     html! {
         <main class="grid place-items-center gap-2 pt-4 auto-rows-minmax">
             <h1>{"Регистрация"}</h1>
-            <RegistrationForm on_submit={handle_submit} />
+            <RegistrationForm error={(*error_state).clone()} is_loading={*is_loading_state} on_submit={handle_submit} />
             <Link<MainRoute> classes="text-xs opacity-75 hover:opacity-100" to={MainRoute::Login}>{"Уже есть аккаунт? Авторизироваться"}</Link<MainRoute>>
         </main>
     }

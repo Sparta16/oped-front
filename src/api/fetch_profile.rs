@@ -2,7 +2,7 @@ use reqwasm::http::Request;
 use serde::Deserialize;
 use web_sys::RequestCredentials;
 
-use crate::api::models::{ApiError, ApiErrorPayload};
+use crate::api::models::{ApiError, ApiErrorPayload, ErrorDto};
 use crate::constants::ENV_CONFIG;
 use crate::contexts::auth_context::Profile;
 
@@ -35,19 +35,27 @@ pub async fn fetch_profile() -> Result<ProfileResDto, ApiError> {
     let response = result.unwrap();
 
     if response.status() >= 400 {
-        return Err(ApiError::Payload(ApiErrorPayload {
+        let result = response.json::<ErrorDto>().await;
+
+        if let Err(error) = result {
+            return Err(error.into());
+        }
+
+        let dto = result.unwrap();
+
+        Err(ApiError::Payload(ApiErrorPayload {
             code: response.status(),
-            message: response.text().await.unwrap_or_default(),
-        }));
+            message: dto.message,
+        }))
+    } else {
+        let result = response.json::<ProfileResDto>().await;
+
+        if let Err(error) = result {
+            return Err(error.into());
+        }
+
+        let dto = result.unwrap();
+
+        Ok(dto)
     }
-
-    let result = response.json::<ProfileResDto>().await;
-
-    if let Err(error) = result {
-        return Err(error.into());
-    }
-
-    let profile = result.unwrap();
-
-    Ok(profile)
 }
