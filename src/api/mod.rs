@@ -10,4 +10,7 @@ pub use fetch_user_registration::fetch_user_registration;
 pub mod fetch_user_login;
 pub use fetch_user_login::fetch_user_login;
 
+pub mod fetch_user;
+pub use fetch_user::fetch_user;
+
 pub mod models;

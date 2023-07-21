@@ -2,8 +2,10 @@ use yew::prelude::*;
 use yew_router::prelude::*;
 
 use crate::components::Header;
-use crate::hocs::{WithAuth, WithoutAuth};
-use crate::pages::{HomePage, LoginPage, NotFoundPage, RegistrationPage, UsersPage};
+use crate::hocs::{WithProfile, WithoutAuth};
+use crate::pages::{
+    HomePage, LoginPage, NotFoundPage, ProfilePage, RegistrationPage, UserPage, UsersPage,
+};
 
 #[function_component(Router)]
 pub fn router() -> Html {
@@ -69,5 +71,28 @@ fn switch_main_route(route: MainRoute) -> Html {
             </WithoutAuth>
         },
         MainRoute::NotFound => html! {<Redirect<AppRoute> to={AppRoute::NotFound} />},
+    }
+}
+
+#[derive(Clone, Routable, PartialEq)]
+pub enum UsersRoute {
+    #[at("/users")]
+    Users,
+    #[at("/users/:login")]
+    User { login: String },
+    #[not_found]
+    #[at("/404")]
+    NotFound,
+}
+
+fn switch_users_route(route: UsersRoute) -> Html {
+    match route {
+        UsersRoute::Users => html! {<UsersPage />},
+        UsersRoute::User { login } => html! {
+            <WithProfile login={login.clone()} denied_children={html! {<UserPage login={login.clone()} />}}>
+                <ProfilePage />
+            </WithProfile>
+        },
+        UsersRoute::NotFound => html! {<Redirect<AppRoute> to={AppRoute::NotFound} />},
     }
 }
