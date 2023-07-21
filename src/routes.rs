@@ -23,7 +23,7 @@ pub enum AppRoute {
     NotFound,
 }
 
-pub fn switch_app_route(route: AppRoute) -> Html {
+fn switch_app_route(route: AppRoute) -> Html {
     match route {
         AppRoute::MainRoot | AppRoute::Main => html! {
             <>
@@ -40,6 +40,8 @@ pub enum MainRoute {
     #[at("/")]
     Home,
     #[at("/users")]
+    UsersRoot,
+    #[at("/users/*")]
     Users,
     #[at("/registration")]
     Registration,
@@ -50,13 +52,11 @@ pub enum MainRoute {
     NotFound,
 }
 
-pub fn switch_main_route(route: MainRoute) -> Html {
+fn switch_main_route(route: MainRoute) -> Html {
     match route {
         MainRoute::Home => html! {<HomePage />},
-        MainRoute::Users => html! {
-            <WithAuth denied_children={html! {<Redirect<AppRoute> to={AppRoute::NotFound} />}}>
-                <UsersPage />
-            </WithAuth>
+        MainRoute::UsersRoot | MainRoute::Users => html! {
+            <Switch<UsersRoute> render={switch_users_route}/>
         },
         MainRoute::Registration => html! {
             <WithoutAuth denied_children={html! {<Redirect<AppRoute> to={AppRoute::NotFound} />}}>

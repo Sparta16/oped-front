@@ -12,7 +12,7 @@ pub struct UserResDto {
 }
 
 pub async fn fetch_users() -> Result<Vec<UserResDto>, ApiError> {
-    let result = Request::get((ENV_CONFIG.clone_api_base_url() + "/users").as_str())
+    let result = Request::get(&(ENV_CONFIG.clone_api_base_url() + "/users"))
         .header("content-type", "application/json")
         .credentials(RequestCredentials::Include)
         .send()

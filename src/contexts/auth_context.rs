@@ -84,9 +84,9 @@ pub fn auth_provider(props: &Props) -> Html {
     );
 
     html! {
-        <ContextProvider<UseReducerHandle<AuthContextState>> context={auth_context.clone()}>
+        <ContextProvider<AuthContext> context={auth_context.clone()}>
             {props.children.clone()}
-        </ContextProvider<UseReducerHandle<AuthContextState>>>
+        </ContextProvider<AuthContext>>
     }
 }
 

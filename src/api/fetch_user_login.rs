@@ -15,7 +15,7 @@ pub struct UserLoginReqDto {
 pub struct UserLoginResDto {}
 
 pub async fn fetch_user_login(payload: UserLoginReqDto) -> Result<UserLoginResDto, ApiError> {
-    let result = Request::post((ENV_CONFIG.clone_api_base_url() + "/users/login").as_str())
+    let result = Request::post(&(ENV_CONFIG.clone_api_base_url() + "/users/login"))
         .header("content-type", "application/json")
         .credentials(RequestCredentials::Include)
         .body(serde_json::to_string(&payload).unwrap())

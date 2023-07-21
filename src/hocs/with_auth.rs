@@ -13,7 +13,7 @@ pub fn with_auth(props: &Props) -> Html {
     let auth_context = use_auth_context();
 
     html! {
-        if let Some(_) = &auth_context.profile {
+        if let Some(_) = auth_context.profile {
             {props.children.clone()}
         } else {
             {props.denied_children.clone()}

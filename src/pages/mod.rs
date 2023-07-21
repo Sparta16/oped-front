@@ -12,3 +12,9 @@ pub use registration_page::RegistrationPage;
 
 pub mod users_page;
 pub use users_page::UsersPage;
+
+pub mod user_page;
+pub use user_page::UserPage;
+
+pub mod profile_page;
+pub use profile_page::ProfilePage;

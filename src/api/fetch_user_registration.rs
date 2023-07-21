@@ -17,7 +17,7 @@ pub struct UserRegistrationResDto {}
 pub async fn fetch_user_registration(
     payload: UserRegistrationReqDto,
 ) -> Result<UserRegistrationResDto, ApiError> {
-    let result = Request::post((ENV_CONFIG.clone_api_base_url() + "/users/registration").as_str())
+    let result = Request::post(&(ENV_CONFIG.clone_api_base_url() + "/users/registration"))
         .header("content-type", "application/json")
         .credentials(RequestCredentials::Include)
         .body(serde_json::to_string(&payload).unwrap())

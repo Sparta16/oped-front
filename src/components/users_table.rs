@@ -1,6 +1,8 @@
 use yew::prelude::*;
+use yew_router::prelude::*;
 
 use crate::api::fetch_users::UserResDto;
+use crate::routes::UsersRoute;
 
 #[derive(Properties, PartialEq)]
 pub struct Props {
@@ -14,7 +16,8 @@ pub fn users_table(props: &Props) -> Html {
             <thead class="bg-sky-200">
                 <tr>
                     <th class="border border-grey-900 px-2">{"Id"}</th>
-                    <th class="border border-grey-900 px-2">{"Login"}</th>
+                    <th class="border border-grey-900 px-2">{"Логин"}</th>
+                    <th class="border border-grey-900 px-2">{"Ссылка"}</th>
                 </tr>
             </thead>
             <tbody>
@@ -24,6 +27,9 @@ pub fn users_table(props: &Props) -> Html {
                             <tr key={user.id}>
                                 <td class="border border-grey-900 px-2">{user.id}</td>
                                 <td class="border border-grey-900 px-2">{user.login.clone()}</td>
+                                <td class="border border-grey-900 px-2">
+                                    <Link<UsersRoute> to={UsersRoute::User {login: user.login.clone()}}>{"Перейти"}</Link<UsersRoute>>
+                                </td>
                             </tr>
                         }
                     }).collect::<Html>()

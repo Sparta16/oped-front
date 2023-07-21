@@ -13,7 +13,7 @@ pub fn without_auth(props: &Props) -> Html {
     let auth_context = use_auth_context();
 
     html! {
-        if let None = &auth_context.profile {
+        if let None = auth_context.profile {
             {props.children.clone()}
         } else {
             {props.denied_children.clone()}
